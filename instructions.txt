@@ -1,0 +1,17 @@
+            [Instructions for Space Invaders]
+This game has five Keys that is use to control the player and the game.
+1. a
+2. d
+3. Space Bar                       
+4. q
+5. h
+
+1> FOR CHANGING THE POSITIONS OF SPACE SHIP
+"a" is for moving left
+"d" is for moving right
+2> FOR FIRERING THE BULLET
+ press space bar
+3> FOR QUITING THE GAME
+ press "q"
+4> FOR HELP
+ press "h"
