@@ -38,6 +38,14 @@ void DisplayEnemylife(){
         printf("#");
     }
 }
+void Displayplayerlife(struct spaceship *s){
+    setposition(55,2);
+    printf("%s's life ",s->name);
+    setposition(55,3);
+    for(int i = 0; i<playerLife; ++i){
+        printf("#");
+    }
+}
 void help(){
     system("cls");
     FILE *file = fopen("instructions.txt","r");
@@ -63,10 +71,8 @@ void who_win(){
     if(enemyLife == 0){
         printf("YOU WIN\n");
     }
-    else if((enemyLife == 0 && playerLife == 0) || (enemyLife != 0 || playerLife != 0)){
-        if((enemyLife == 0 && playerLife == 0)){
-            printf("Game Draw\n");
-        }
+    else if((enemyLife == 0 && playerLife == 0)){
+        printf("Game Draw\n");
     }
     else{
         printf("YOU LOOSE\n");
@@ -79,17 +85,10 @@ void fillstock(struct bullet stock[],struct spaceship s){
             stock[i].x = s.x;
             stock[i].y = s.y;
             stock[i].is_fire = false;
-            stock[i].speed = 2;
+            stock[i].speed = 4;
        }   
 }
-void Displayplayerlife(struct spaceship *s){
-    setposition(55,2);
-    printf("%s's life ",s->name);
-    setposition(55,3);
-    for(int i = 0; i<playerLife; ++i){
-        printf("#");
-    }
-}
+
 void displayPlayersPosition(struct spaceship *s, struct spaceship *enemy){
     setposition(55, 0);
     printf(" X position of %s : %d \n",s->name,s->x);
@@ -111,7 +110,7 @@ int isEmpty(struct bullet *b,struct spaceship *enemy){
     return 1;
     
 }
-void logic(struct spaceship *player,struct spaceship *enemy,struct bullet *playerBullet, struct bullet *oponentBullet){
+void logic(struct spaceship *player,struct spaceship *enemy,struct bullet playerBullets[], struct bullet *oponentBullet){
     // this condition executed when player spaceship go beyond the border
     if(player->x <= 3 || player->x >= (WIDTH-4)){
         if(player->x <= 3){
@@ -123,23 +122,24 @@ void logic(struct spaceship *player,struct spaceship *enemy,struct bullet *playe
     }
     // this condition executed when player bullets hit with some obstecles
         for(int i = 0; i<countSpaceBar+1; ++i){
-           if(playerBullet[i].y <= enemy->y || playerBullet[i].y <= 4){
-                  playerBullet[i].y = player->y;
-                  playerBullet[i].is_fire = false;
+           if(playerBullets[i].y <= enemy->y  || playerBullets[i].y <= 4){
+                  playerBullets[i].y = player->y;
+                  playerBullets[i].is_fire = false;
                   // condition if ship hits the to other ship
-                  if(playerBullet[i].y >= enemy->y && playerBullet[i].x >= enemy->x){
+                  if(playerBullets[i].y >= enemy->y && playerBullets[i].x >= enemy->x){
                         enemyLife--; // oponent ship looses its by 1
                     } 
             }
         }
-        if(isEmpty(playerBullet,enemy)){
+        if(isEmpty(playerBullets,enemy)){
             countSpaceBar = -1;
         }
+        // this condition executes when the oponent buttlet hit with obstecle
          if(oponentBullet->y >= player->y || oponentBullet->y >= 80)
         {
                oponentBullet->y = enemy->y;
                oponentBullet->is_fire = false;
-               if(oponentBullet->y >= player->y && oponentBullet->x == player->x){
+               if(oponentBullet->y <= player->y && oponentBullet->x <= player->x){
                      playerLife--; // player ship looses its by 1
                 } 
         }
@@ -284,7 +284,7 @@ int main(){
      struct bullet B2;
      B2.x = S2.x;
      B2.y = S2.y;
-     B2.speed = 1;
+     B2.speed = 2;
      B2.is_fire = true;
      Give_player_name(&S1);
      help();
@@ -292,13 +292,13 @@ int main(){
     while(!gameOver){
         printf("                          SPACE INVADERS                ");
         border(5,5);
-        logic(&S1,&S2,B1,&B2);
         displayPlayersPosition(&S1,&S2);
         Displayplayerlife(&S1);
         DisplayEnemylife();
         Set_Random_position_of_Enemy(&S2,&B2);
         set_Spaceship_Position(&S1);
         control(&S1,B1);
+        logic(&S1,&S2,B1,&B2);
         ReinitializeSpaceBar();
         set_player_bulletposition(B1,&S1);
         set_enemy_bullet_position(&B2,&S2);
