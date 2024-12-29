@@ -29,6 +29,9 @@ void setposition(int x , int y){
         pos.Y = y;
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),pos);
 }
+void playShootSound() {
+    PlaySound(TEXT("sounds/shoot.wav"), NULL, SND_FILENAME | SND_ASYNC);
+}
 // these two functions are use to display life of both spaceships
 void DisplayEnemylife(){
     setposition(55,12);
@@ -196,6 +199,7 @@ void control(struct spaceship *S, struct bullet * b){
             case (char)32: // this condition is use for firing bullets
             countSpaceBar++;
              b[countSpaceBar].is_fire = true;
+             playShootSound();
              break;
             case 'q': // for QUITING
             close_option();
@@ -231,6 +235,7 @@ void Set_Random_position_of_Enemy(struct spaceship *enemy,struct bullet *enemyBu
         int r = rand()%5;
        enemy->x = givenXpostion[r];
        enemyBullet->is_fire = true;
+       playShootSound();
     }
      set_Enemy_Spaceship_Position(enemy); 
 }
