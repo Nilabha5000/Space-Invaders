@@ -68,7 +68,7 @@ enemy->x = givenXposition[r];
 - Port the game to a cross-platform environment.
 
 ## Credits
-- Designed and implemented by [Your Name].
+- Designed and implemented by Nilabha.
 - Inspired by the classic arcade game "Space Invaders."
 
 ## License
